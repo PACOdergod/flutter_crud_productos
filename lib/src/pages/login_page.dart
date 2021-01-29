@@ -84,22 +84,67 @@ class LoginPage extends StatelessWidget {
             height: 200,
           )),
           Container(
-            width: size.width * .90,
-            margin: EdgeInsets.symmetric(vertical: 20),
-            padding: EdgeInsets.symmetric(vertical: 20),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black, width: 4)),
-            child: Column(
-              children: [
-                Text(
-                  'Login',
-                  style: TextStyle(fontSize: 30.0),
-                ),
-              ],
-            ),
-          )
+              width: size.width * .90,
+              margin: EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black, width: 4)),
+              child: Column(
+                children: [
+                  Text(
+                    'Login',
+                    style: TextStyle(fontSize: 30.0),
+                  ),
+                  SizedBox(height: 10.0),
+                  _crearEmail(),
+                  SizedBox(height: 10.0),
+                  _crearPassword(),
+                  SizedBox(height: 30.0),
+                  _crearBoton(),
+                ],
+              )),
+          Text('¿Olvidaste tu contraseña'),
+          SizedBox(height: 30.0)
         ],
+      ),
+    );
+  }
+
+  Widget _crearEmail() {
+    return Container(
+      child: TextField(
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+            hintText: 'ejemplo@correo.com',
+            labelText: 'Correo electronico',
+            icon: Icon(Icons.alternate_email, color: Colors.red)),
+      ),
+    );
+  }
+
+  Widget _crearPassword() {
+    return Container(
+      child: TextField(
+        obscureText: true,
+        decoration: InputDecoration(
+            hintText: 'ejemplo@correo.com',
+            labelText: 'Correo electronico',
+            icon: Icon(Icons.lock_outline, color: Colors.red)),
+      ),
+    );
+  }
+
+  Widget _crearBoton() {
+    return RaisedButton(
+      onPressed: () {},
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 0,
+      color: Colors.amber,
+      child: Container(
+        child: Text('Ingresar'),
+        padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 10.0),
       ),
     );
   }
