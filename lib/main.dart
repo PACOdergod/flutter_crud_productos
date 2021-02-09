@@ -8,13 +8,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      child: MaterialApp(
-        title: 'Material App',
-        initialRoute: 'login',
-        routes: {
-          'login': (BuildContext context) => LoginPage(),
-        },
-      ),
-    );
+        child: MaterialApp(
+      title: 'Material App',
+      initialRoute: 'login',
+      routes: {
+        'login': (BuildContext context) => LoginPage(),
+      },
+    ));
   }
 }

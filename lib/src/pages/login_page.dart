@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_productos/src/bloc/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -76,6 +77,8 @@ class LoginPage extends StatelessWidget {
 
   Widget _crearLogin(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final bloc = Provider.of(context);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -98,9 +101,9 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(fontSize: 30.0),
                   ),
                   SizedBox(height: 10.0),
-                  _crearEmail(),
+                  _crearEmail(bloc),
                   SizedBox(height: 10.0),
-                  _crearPassword(),
+                  _crearPassword(bloc),
                   SizedBox(height: 30.0),
                   _crearBoton(),
                 ],
@@ -112,28 +115,37 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _crearEmail() {
-    return Container(
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-            hintText: 'ejemplo@correo.com',
-            labelText: 'Correo electronico',
-            icon: Icon(Icons.alternate_email, color: Colors.red)),
-      ),
-    );
+  Widget _crearEmail(LoginBloc bloc) {
+    return StreamBuilder(
+        stream: bloc.emailStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            child: TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: 'ejemplo@correo.com',
+                  labelText: 'Correo electronico',
+                  icon: Icon(Icons.alternate_email, color: Colors.red)),
+              onChanged: (value) => bloc.changeEmail(value),
+            ),
+          );
+        });
   }
 
-  Widget _crearPassword() {
-    return Container(
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-            hintText: 'ejemplo@correo.com',
-            labelText: 'Correo electronico',
-            icon: Icon(Icons.lock_outline, color: Colors.red)),
-      ),
-    );
+  Widget _crearPassword(LoginBloc bloc) {
+    return StreamBuilder(
+        stream: bloc.passwordStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            child: TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                  hintText: 'ejemplo@correo.com',
+                  labelText: 'Contraseña',
+                  icon: Icon(Icons.lock_outline, color: Colors.red)),
+            ),
+          );
+        });
   }
 
   Widget _crearBoton() {
