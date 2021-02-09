@@ -140,9 +140,12 @@ class LoginPage extends StatelessWidget {
             child: TextField(
               obscureText: true,
               decoration: InputDecoration(
-                  hintText: 'ejemplo@correo.com',
-                  labelText: 'Contraseña',
-                  icon: Icon(Icons.lock_outline, color: Colors.red)),
+                hintText: 'ejemplo@correo.com',
+                labelText: 'Contraseña',
+                errorText: snapshot.error,
+                icon: Icon(Icons.lock_outline, color: Colors.red),
+              ),
+              onChanged: (value) => bloc.changePassword(value),
             ),
           );
         });
