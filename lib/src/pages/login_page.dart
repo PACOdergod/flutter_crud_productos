@@ -75,6 +75,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
+
   Widget _crearLogin(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final bloc = Provider.of(context);
@@ -123,9 +124,11 @@ class LoginPage extends StatelessWidget {
             child: TextField(
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                  hintText: 'ejemplo@correo.com',
-                  labelText: 'Correo electronico',
-                  icon: Icon(Icons.alternate_email, color: Colors.red)),
+                hintText: 'ejemplo@correo.com',
+                labelText: 'Correo electronico',
+                errorText: snapshot.error,
+                icon: Icon(Icons.alternate_email, color: Colors.red),
+              ),
               onChanged: (value) => bloc.changeEmail(value),
             ),
           );
