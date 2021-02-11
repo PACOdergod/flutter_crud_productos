@@ -166,18 +166,11 @@ class LoginPage extends StatelessWidget {
               child: Text('Ingresar'),
               padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 10.0),
             ),
-            onPressed:
-                snapshot.hasData ? () => _lastValor(bloc, context) : null,
+            onPressed: snapshot.hasData 
+                        ? ()=>Navigator.pushReplacementNamed(context, 'home') 
+                        : null,
           );
         });
   }
 
-  _lastValor(LoginBloc bloc, BuildContext context) {
-    print("-----------------------------");
-    print('email: ${bloc.lastEmail}');
-    print('Contraseña: ${bloc.lastPass}');
-    print("-----------------------------");
-
-    Navigator.pushReplacementNamed(context, 'home');
-  }
 }
