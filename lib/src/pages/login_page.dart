@@ -75,7 +75,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-
   Widget _crearLogin(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final bloc = Provider.of(context);
@@ -155,23 +154,30 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _crearBoton(LoginBloc bloc) {
-
     return StreamBuilder(
-      stream: bloc.formValidateStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        
-        return RaisedButton(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 0,
-          color: Colors.amber,
-          child: Container(
-            child: Text('Ingresar'),
-            padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 10.0),
-          ),
-          onPressed: snapshot.hasData ? ()=>print("Ingresando") :null,
-        );
-      }  
-    );
+        stream: bloc.formValidateStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return RaisedButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            elevation: 0,
+            color: Colors.amber,
+            child: Container(
+              child: Text('Ingresar'),
+              padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 10.0),
+            ),
+            onPressed:
+                snapshot.hasData ? () => _lastValor(bloc, context) : null,
+          );
+        });
+  }
 
+  _lastValor(LoginBloc bloc, BuildContext context) {
+    print("-----------------------------");
+    print('email: ${bloc.lastEmail}');
+    print('Contraseña: ${bloc.lastPass}');
+    print("-----------------------------");
+
+    Navigator.pushReplacementNamed(context, 'home');
   }
 }

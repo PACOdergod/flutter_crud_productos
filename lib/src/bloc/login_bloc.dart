@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:flutter_productos/src/bloc/validators.dart';
 
 class LoginBloc with Validator {
-  final _emailController    = BehaviorSubject<String>();
+  final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
 
   // Recuperar los datos del stream
@@ -19,6 +19,10 @@ class LoginBloc with Validator {
   // Insertar valores al stream
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
+
+  //Obtener ultimo valor
+  String get lastEmail => _emailController.value;
+  String get lastPass => _passwordController.value;
 
   dispose() {
     _emailController?.close();
