@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_productos/src/models/producto_model.dart';
 import 'package:flutter_productos/src/utils/utils.dart' as utils;
 
 class ProductoPage extends StatefulWidget {
@@ -8,9 +9,11 @@ class ProductoPage extends StatefulWidget {
 
 class _ProductoPageState extends State<ProductoPage> {
   final formKey = GlobalKey<FormState>();
+  ProductoModel producto = new ProductoModel();
 
   @override
   Widget build(BuildContext context) {
+    print(producto.disponible);
     return Scaffold(
       appBar: AppBar(
         title: Text('Producto'),
@@ -25,7 +28,12 @@ class _ProductoPageState extends State<ProductoPage> {
           child: Form(
               key: formKey,
               child: Column(
-                children: [_crearNombre(), _crearPrecio(), _crearBoton()],
+                children: [
+                  _crearNombre(),
+                  _crearPrecio(),
+                  _crearDisponible(),
+                  _crearBoton()
+                ],
               )),
         ),
       ),
@@ -34,6 +42,7 @@ class _ProductoPageState extends State<ProductoPage> {
 
   Widget _crearNombre() {
     return TextFormField(
+      initialValue: producto.titulo,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Nombre'),
       validator: (value) {
@@ -43,11 +52,13 @@ class _ProductoPageState extends State<ProductoPage> {
           return null;
         }
       },
+      onSaved: (value) => producto.titulo = value,
     );
   }
 
   Widget _crearPrecio() {
     return TextFormField(
+      initialValue: producto.valor.toString(),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Precio'),
@@ -58,7 +69,15 @@ class _ProductoPageState extends State<ProductoPage> {
           return 'solo numeros';
         }
       },
+      onSaved: (value) => producto.valor = double.parse(value),
     );
+  }
+
+  Widget _crearDisponible() {
+    return SwitchListTile(
+        value: producto.disponible,
+        title: Text('Disponible?'),
+        onChanged: (value) => setState(() => producto.disponible = value));
   }
 
   Widget _crearBoton() {
@@ -66,13 +85,17 @@ class _ProductoPageState extends State<ProductoPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       icon: Icon(Icons.save),
       label: Text('Guardar'),
-      color: Colors.amber[900],
+      color: Colors.amber[700],
       textColor: Colors.white,
       onPressed: _submit,
     );
   }
 
   void _submit() {
-    formKey.currentState.validate();
+    if (!formKey.currentState.validate()) return;
+
+    // Con este metodo se manda a llamar el metodo onSave
+    // de TextFormField
+    formKey.currentState.save();
   }
 }
