@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_productos/src/models/producto_model.dart';
+import 'package:flutter_productos/src/providers/productos_providers.dart';
 import 'package:flutter_productos/src/utils/utils.dart' as utils;
 
 class ProductoPage extends StatefulWidget {
@@ -9,6 +10,7 @@ class ProductoPage extends StatefulWidget {
 
 class _ProductoPageState extends State<ProductoPage> {
   final formKey = GlobalKey<FormState>();
+  final productoProvider = new ProductosProvider();
   ProductoModel producto = new ProductoModel();
 
   @override
@@ -97,5 +99,7 @@ class _ProductoPageState extends State<ProductoPage> {
     // Con este metodo se manda a llamar el metodo onSave
     // de TextFormField
     formKey.currentState.save();
+
+    productoProvider.enviarProducto(producto);
   }
 }
