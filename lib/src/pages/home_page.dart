@@ -22,15 +22,33 @@ class HomePage extends StatelessWidget {
   Widget _crearListado() {
     return FutureBuilder(
         future: productosProvider.obtenerProductos(),
-        builder: (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ProductoModel>> snapshot) {
           if (snapshot.hasData) {
-            return Container();
+            final productos = snapshot.data;
+            return ListView.builder(
+                itemCount: productos.length, 
+                itemBuilder: (context, i) => _crearProducto(context, productos[i]));
           } else {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
         });
+  }
+
+  Widget _crearProducto(BuildContext context, ProductoModel producto) {
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(color: Colors.red),
+      onDismissed: (direction) {
+        //TODO: borrar producto
+      },
+      child: ListTile(
+        title: Text('${producto.titulo} - ${producto.valor}'),
+        onTap: ()=>Navigator.pushNamed(context, 'producto'),
+      ),
+    );
   }
 
   Widget _botonProductos(BuildContext context) {
