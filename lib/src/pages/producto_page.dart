@@ -15,7 +15,10 @@ class _ProductoPageState extends State<ProductoPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(producto.disponible);
+    ProductoModel prodData = ModalRoute.of(context).settings.arguments;
+    // print(args.id);
+    if (prodData != null) producto = prodData;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Producto'),
@@ -34,7 +37,7 @@ class _ProductoPageState extends State<ProductoPage> {
                   _crearNombre(),
                   _crearPrecio(),
                   _crearDisponible(),
-                  _crearBoton()
+                  _crearBoton(prodData)
                 ],
               )),
         ),
@@ -82,24 +85,29 @@ class _ProductoPageState extends State<ProductoPage> {
         onChanged: (value) => setState(() => producto.disponible = value));
   }
 
-  Widget _crearBoton() {
+  Widget _crearBoton(ProductoModel prodData) {
     return RaisedButton.icon(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       icon: Icon(Icons.save),
       label: Text('Guardar'),
       color: Colors.amber[700],
       textColor: Colors.white,
-      onPressed: _submit,
+      onPressed: () {
+        //TODO: feedback cuando presione el boton
+        if (!formKey.currentState.validate()) return;
+
+        // Con este metodo se manda a llamar el metodo onSave
+        // de TextFormField
+        formKey.currentState.save();
+
+        if (prodData == null) {
+          productoProvider.enviarProducto(producto);
+        } else{
+          productoProvider.editarProducto(producto);
+        }
+
+      },
     );
   }
 
-  void _submit() {
-    if (!formKey.currentState.validate()) return;
-
-    // Con este metodo se manda a llamar el metodo onSave
-    // de TextFormField
-    formKey.currentState.save();
-
-    productoProvider.enviarProducto(producto);
-  }
 }

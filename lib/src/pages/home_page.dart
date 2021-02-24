@@ -3,6 +3,8 @@ import 'package:flutter_productos/src/models/producto_model.dart';
 import 'package:flutter_productos/src/providers/productos_providers.dart';
 // import 'package:flutter_productos/src/bloc/provider.dart';
 
+//TODO: se debe actualizar la pagina automaticamente
+
 class HomePage extends StatelessWidget {
   final productosProvider = new ProductosProvider();
 
@@ -43,12 +45,14 @@ class HomePage extends StatelessWidget {
       key: UniqueKey(),
       background: Container(color: Colors.red),
       onDismissed: (direction) {
-        //TODO: borrar producto
         productosProvider.borrarProducto(producto.id);
       },
       child: ListTile(
         title: Text('${producto.titulo} - ${producto.valor}'),
-        onTap: () => Navigator.pushNamed(context, 'producto'),
+        onTap: () {
+          Navigator.pushNamed(context, 'producto', arguments: producto);
+
+        },
       ),
     );
   }
