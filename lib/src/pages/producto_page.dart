@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_productos/src/models/producto_model.dart';
 import 'package:flutter_productos/src/providers/productos_providers.dart';
 import 'package:flutter_productos/src/utils/utils.dart' as utils;
@@ -13,6 +16,7 @@ class _ProductoPageState extends State<ProductoPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final productoProvider = new ProductosProvider();
   ProductoModel producto = new ProductoModel();
+  File foto;
 
   bool _guardando = false;
 
@@ -27,7 +31,9 @@ class _ProductoPageState extends State<ProductoPage> {
       appBar: AppBar(
         title: Text('Producto'),
         actions: [
-          IconButton(icon: Icon(Icons.image_outlined), onPressed: null),
+          IconButton(
+              icon: Icon(Icons.image_outlined),
+              onPressed: _seleccionarFoto),
           IconButton(icon: Icon(Icons.camera_alt), onPressed: null)
         ],
       ),
@@ -38,6 +44,7 @@ class _ProductoPageState extends State<ProductoPage> {
               key: formKey,
               child: Column(
                 children: [
+                  _mostrarFoto(),
                   _crearNombre(),
                   _crearPrecio(),
                   _crearDisponible(),
@@ -47,6 +54,30 @@ class _ProductoPageState extends State<ProductoPage> {
         ),
       ),
     );
+  }
+
+  _mostrarFoto() {
+    if (producto.fotoUrl != null) {
+      // TODO; mostrar foto
+      return Container();
+    } else {
+      return Image(
+          image: AssetImage( foto?.path ?? 'assets/no-image.png'),
+          height: 300.0,
+          fit: BoxFit.cover);
+    }
+  }
+
+  _seleccionarFoto() async {
+    final _picker = ImagePicker();
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.gallery,
+    );
+    foto = File(pickedFile.path);
+    if (foto != null) {
+      producto.fotoUrl = null;
+    }
+    setState(() {});
   }
 
   Widget _crearNombre() {
@@ -91,17 +122,19 @@ class _ProductoPageState extends State<ProductoPage> {
 
   Widget _crearBoton(ProductoModel prodData) {
     return RaisedButton.icon(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      icon: Icon(Icons.save),
-      label: Text('Guardar'),
-      color: Colors.amber[700],
-      textColor: Colors.white,
-      onPressed: _guardando ? null : ()=>_submit(prodData)
-    );
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        icon: Icon(Icons.save),
+        label: Text('Guardar'),
+        color: Colors.amber[700],
+        textColor: Colors.white,
+        onPressed: _guardando ? null : () => _submit(prodData));
   }
 
-  void _submit (ProductoModel prodData){
-    setState(() {_guardando = true;});
+  void _submit(ProductoModel prodData) {
+    setState(() {
+      _guardando = true;
+    });
 
     if (!formKey.currentState.validate()) return;
 
@@ -122,9 +155,6 @@ class _ProductoPageState extends State<ProductoPage> {
     Future.delayed(const Duration(milliseconds: 2000), () {
       Navigator.pop(context);
     });
-
-
-              
   }
 
   void mostarSnackbar(String mensaje) {
