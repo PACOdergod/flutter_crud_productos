@@ -14,6 +14,8 @@ class _ProductoPageState extends State<ProductoPage> {
   final productoProvider = new ProductosProvider();
   ProductoModel producto = new ProductoModel();
 
+  bool _guardando = false;
+
   @override
   Widget build(BuildContext context) {
     ProductoModel prodData = ModalRoute.of(context).settings.arguments;
@@ -94,24 +96,35 @@ class _ProductoPageState extends State<ProductoPage> {
       label: Text('Guardar'),
       color: Colors.amber[700],
       textColor: Colors.white,
-      onPressed: () {
-        if (!formKey.currentState.validate()) return;
-
-        // Con este metodo se manda a llamar el metodo onSave
-        // de TextFormField
-        formKey.currentState.save();
-
-        if (prodData == null) {
-          productoProvider.enviarProducto(producto);
-        } else {
-          productoProvider.editarProducto(producto);
-        }
-
-        FocusScope.of(context).requestFocus(FocusNode());
-
-        mostarSnackbar('Registro guardado');
-      },
+      onPressed: _guardando ? null : ()=>_submit(prodData)
     );
+  }
+
+  void _submit (ProductoModel prodData){
+    setState(() {_guardando = true;});
+
+    if (!formKey.currentState.validate()) return;
+
+    // Con este metodo se manda a llamar el metodo onSave
+    // de TextFormField
+    formKey.currentState.save();
+
+    if (prodData == null) {
+      productoProvider.enviarProducto(producto);
+    } else {
+      productoProvider.editarProducto(producto);
+    }
+
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    mostarSnackbar('Registro guardado');
+
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      Navigator.pop(context);
+    });
+
+
+              
   }
 
   void mostarSnackbar(String mensaje) {
