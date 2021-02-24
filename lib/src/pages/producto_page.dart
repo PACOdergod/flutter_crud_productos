@@ -10,6 +10,7 @@ class ProductoPage extends StatefulWidget {
 
 class _ProductoPageState extends State<ProductoPage> {
   final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final productoProvider = new ProductosProvider();
   ProductoModel producto = new ProductoModel();
 
@@ -20,6 +21,7 @@ class _ProductoPageState extends State<ProductoPage> {
     if (prodData != null) producto = prodData;
 
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Producto'),
         actions: [
@@ -93,7 +95,6 @@ class _ProductoPageState extends State<ProductoPage> {
       color: Colors.amber[700],
       textColor: Colors.white,
       onPressed: () {
-        //TODO: feedback cuando presione el boton
         if (!formKey.currentState.validate()) return;
 
         // Con este metodo se manda a llamar el metodo onSave
@@ -102,12 +103,23 @@ class _ProductoPageState extends State<ProductoPage> {
 
         if (prodData == null) {
           productoProvider.enviarProducto(producto);
-        } else{
+        } else {
           productoProvider.editarProducto(producto);
         }
 
+        FocusScope.of(context).requestFocus(FocusNode());
+
+        mostarSnackbar('Registro guardado');
       },
     );
   }
 
+  void mostarSnackbar(String mensaje) {
+    final snackbar = SnackBar(
+      content: Text(mensaje),
+      duration: Duration(seconds: 2),
+    );
+
+    scaffoldKey.currentState.showSnackBar(snackbar);
+  }
 }
