@@ -34,7 +34,7 @@ class _ProductoPageState extends State<ProductoPage> {
           IconButton(
               icon: Icon(Icons.image_outlined),
               onPressed: _seleccionarFoto),
-          IconButton(icon: Icon(Icons.camera_alt), onPressed: null)
+          IconButton(icon: Icon(Icons.camera_alt), onPressed: _tomarFoto)
         ],
       ),
       body: SingleChildScrollView(
@@ -72,6 +72,18 @@ class _ProductoPageState extends State<ProductoPage> {
     final _picker = ImagePicker();
     final pickedFile = await _picker.getImage(
       source: ImageSource.gallery,
+    );
+    foto = File(pickedFile.path);
+    if (foto != null) {
+      producto.fotoUrl = null;
+    }
+    setState(() {});
+  }
+
+  _tomarFoto() async {
+    final _picker = ImagePicker();
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.camera,
     );
     foto = File(pickedFile.path);
     if (foto != null) {
